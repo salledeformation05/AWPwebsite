@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
-import { AuthContext, View, Page } from '../App';
+// Fix: Update AuthContext import path to fix circular dependency
+import { View, Page } from '../App';
+import { AuthContext } from '../types';
 import { UserIcon } from './icons/UserIcon';
 import { LogoutIcon } from './icons/LogoutIcon';
-import { WeldIcon } from './icons/WeldIcon';
+import { Logo } from './Logo';
 
 interface HeaderProps {
     currentView: View;
@@ -17,7 +19,7 @@ const NavLink: React.FC<{
 }> = ({ page, currentView, navigate, children }) => (
     <button 
         onClick={() => navigate(page)}
-        className={`text-sm font-medium ${currentView.current === page ? 'text-brand-accent' : 'text-brand-text'} hover:text-brand-accent transition-colors duration-300`}
+        className={`text-sm font-medium ${currentView.current === page || (page === 'news' && currentView.current === 'newsArticle') ? 'text-brand-accent' : 'text-brand-text'} hover:text-brand-accent transition-colors duration-300`}
     >
         {children}
     </button>
@@ -28,19 +30,19 @@ const Header: React.FC<HeaderProps> = ({ currentView, navigate }) => {
 
     return (
         <header className="bg-brand-primary/80 backdrop-blur-sm sticky top-0 z-50 shadow-lg shadow-black/20">
-            <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
+            <nav className="container mx-auto px-6 py-2 flex justify-between items-center">
                 <div 
-                    className="flex items-center space-x-3 cursor-pointer"
+                    className="flex items-center cursor-pointer"
                     onClick={() => navigate('home')}
                 >
-                    <WeldIcon className="w-8 h-8 text-brand-accent" />
-                    <span className="text-xl md:text-2xl font-bold font-heading text-white tracking-wider">AWP</span>
+                    <Logo className="text-3xl" />
                 </div>
                 <div className="flex items-center space-x-6">
                      <div className="hidden md:flex items-center space-x-6">
                         <NavLink page="home" currentView={currentView} navigate={navigate}>ACCUEIL</NavLink>
                         <NavLink page="services" currentView={currentView} navigate={navigate}>SERVICES</NavLink>
                         <NavLink page="projects" currentView={currentView} navigate={navigate}>PROJETS</NavLink>
+                        <NavLink page="news" currentView={currentView} navigate={navigate}>ACTUALITÉS</NavLink>
                         <NavLink page="about" currentView={currentView} navigate={navigate}>À PROPOS</NavLink>
                         <NavLink page="contact" currentView={currentView} navigate={navigate}>CONTACT</NavLink>
                     </div>

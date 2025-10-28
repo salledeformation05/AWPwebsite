@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { AuthContext } from '../App';
+// Fix: Update AuthContext import path to fix circular dependency
+import { AuthContext } from '../types';
 import { User } from '../types';
 import OverviewView from './dashboard/OverviewView';
 import ProfileView from './dashboard/ProfileView';

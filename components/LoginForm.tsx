@@ -1,9 +1,14 @@
-
 import React, { useState, useContext } from 'react';
-import { AuthContext } from '../App';
+// Fix: Update AuthContext import path to fix circular dependency
+import { AuthContext } from '../types';
 import { User } from '../types';
+import { Logo } from './Logo';
 
-const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  onNavigateToRegister: () => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onNavigateToRegister }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,6 +32,9 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className="max-w-md mx-auto mt-10 bg-brand-secondary p-8 rounded-lg shadow-2xl shadow-black/30">
+      <div className="text-center mb-6">
+        <Logo className="text-4xl mx-auto" />
+      </div>
       <h2 className="text-3xl font-bold text-center text-white mb-2 font-heading">Espace Client</h2>
       <p className="text-center text-brand-text mb-8">Accédez à votre tableau de bord de projet.</p>
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -66,6 +74,18 @@ const LoginForm: React.FC = () => {
           </button>
         </div>
       </form>
+
+      <div className="text-center mt-6 text-sm">
+        <p className="text-brand-text">
+          Pas encore de compte ?{' '}
+          <button
+            onClick={onNavigateToRegister}
+            className="font-semibold text-brand-accent hover:underline focus:outline-none"
+          >
+            Créer un compte
+          </button>
+        </p>
+      </div>
     </div>
   );
 };

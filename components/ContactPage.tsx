@@ -1,12 +1,12 @@
-
 import React, { useState } from 'react';
 import { MailIcon } from './icons/MailIcon';
 import { PhoneIcon } from './icons/PhoneIcon';
 import { MapPinIcon } from './icons/MapPinIcon';
+import { useToast } from '../contexts/ToastContext';
 
 const ContactPage: React.FC = () => {
     const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-    const [status, setStatus] = useState('');
+    const { showToast } = useToast();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { id, value } = e.target;
@@ -15,9 +15,8 @@ const ContactPage: React.FC = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setStatus('Merci ! Votre message a été envoyé.');
+        showToast('Merci ! Votre message a été envoyé.');
         setFormData({ name: '', email: '', subject: '', message: '' });
-        setTimeout(() => setStatus(''), 5000);
     };
 
     return (
@@ -33,24 +32,24 @@ const ContactPage: React.FC = () => {
                     <div className="space-y-8 text-brand-text">
                         <h2 className="text-2xl font-bold text-white font-heading">Informations de Contact</h2>
                         <div className="flex items-start space-x-4">
-                            <MapPinIcon className="w-6 h-6 text-brand-accent mt-1" />
+                            <MapPinIcon className="w-6 h-6 text-brand-accent mt-1 flex-shrink-0" />
                             <div>
                                 <h3 className="font-semibold text-white">Adresse</h3>
-                                <p>Zone Industrielle de Yopougon, Lot 123<br/>Abidjan, Côte d'Ivoire</p>
+                                <p>Îlot : 8, Parcelle : J, ATLANTIQUE, ABOMEY-CALAVI, HEVIE, ZOUNGO<br/>Bénin</p>
                             </div>
                         </div>
                         <div className="flex items-start space-x-4">
                             <PhoneIcon className="w-6 h-6 text-brand-accent mt-1" />
                             <div>
                                 <h3 className="font-semibold text-white">Téléphone</h3>
-                                <p>+225 01 02 03 04 05</p>
+                                <a href="https://wa.me/2290195429807" target="_blank" rel="noopener noreferrer" className="hover:text-brand-accent transition-colors duration-300">+229 01 95 42 98 07</a>
                             </div>
                         </div>
                         <div className="flex items-start space-x-4">
                             <MailIcon className="w-6 h-6 text-brand-accent mt-1" />
                             <div>
                                 <h3 className="font-semibold text-white">Email</h3>
-                                <p>contact@awp.ci</p>
+                                <a href="mailto:africanworkshopsandpartners@gmail.com" className="hover:text-brand-accent transition-colors duration-300">africanworkshopsandpartners@gmail.com</a>
                             </div>
                         </div>
                     </div>
@@ -78,7 +77,6 @@ const ContactPage: React.FC = () => {
                                 Envoyer le message
                             </button>
                         </div>
-                        {status && <p className="text-center text-green-400">{status}</p>}
                     </form>
                 </div>
             </div>

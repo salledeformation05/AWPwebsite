@@ -1,57 +1,57 @@
 import React, { useState } from 'react';
-import { allNews as initialNews } from '../../data/news';
-import { NewsArticle } from '../../types';
+import { allClients as initialClients } from '../../data/clients';
+import { User } from '../../types';
 import { PlusIcon } from '../icons/PlusIcon';
 import { EditIcon } from '../icons/EditIcon';
 import { TrashIcon } from '../icons/TrashIcon';
-import NewsArticleFormModal from './NewsArticleFormModal';
+import ClientFormModal from './ClientFormModal';
 import { useToast } from '../../contexts/ToastContext';
 
-const AdminNewsView: React.FC = () => {
-    const [news, setNews] = useState<NewsArticle[]>(initialNews);
+const AdminClientsView: React.FC = () => {
+    const [clients, setClients] = useState<User[]>(initialClients);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [editingArticle, setEditingArticle] = useState<NewsArticle | null>(null);
+    const [editingClient, setEditingClient] = useState<User | null>(null);
     const { showToast } = useToast();
 
-    const handleOpenModal = (article?: NewsArticle) => {
-        setEditingArticle(article || null);
+    const handleOpenModal = (client?: User) => {
+        setEditingClient(client || null);
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
-        setEditingArticle(null);
+        setEditingClient(null);
     };
 
-    const handleSave = (articleToSave: NewsArticle) => {
-        if (editingArticle) {
-            setNews(news.map(n => n.id === articleToSave.id ? articleToSave : n));
-            showToast('Article modifié avec succès !');
+    const handleSave = (clientToSave: User) => {
+        if (editingClient) {
+            setClients(clients.map(c => c.id === clientToSave.id ? clientToSave : c));
+            showToast('Client modifié avec succès !');
         } else {
-            setNews([...news, { ...articleToSave, id: (news.length + 1).toString() }]);
-            showToast('Article ajouté avec succès !');
+            setClients([...clients, { ...clientToSave, id: (clients.length + 1).toString() }]);
+            showToast('Client ajouté avec succès !');
         }
         handleCloseModal();
     };
 
     const handleDelete = (id: string) => {
-        if (window.confirm("Êtes-vous sûr de vouloir supprimer cet article ?")) {
-            setNews(news.filter(n => n.id !== id));
-            showToast('Article supprimé avec succès !', 'error');
+        if (window.confirm('Êtes-vous sûr de vouloir supprimer ce client ?')) {
+            setClients(clients.filter(c => c.id !== id));
+            showToast('Client supprimé avec succès !', 'error');
         }
     };
-
+    
     return (
         <>
             <div>
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-3xl font-bold text-white font-heading">Gestion des Actualités</h2>
+                    <h2 className="text-3xl font-bold text-white font-heading">Gestion des Clients</h2>
                     <button 
                         onClick={() => handleOpenModal()}
                         className="flex items-center space-x-2 bg-brand-accent text-brand-primary font-bold py-2 px-4 rounded-md hover:bg-brand-accent-hover transition-colors duration-300"
                     >
                         <PlusIcon className="w-5 h-5" />
-                        <span>Ajouter un article</span>
+                        <span>Ajouter un client</span>
                     </button>
                 </div>
 
@@ -59,23 +59,23 @@ const AdminNewsView: React.FC = () => {
                     <table className="w-full text-left text-sm text-brand-text">
                         <thead className="border-b border-brand-secondary">
                             <tr>
-                                <th className="p-4">Titre</th>
-                                <th className="p-4">Catégorie</th>
-                                <th className="p-4">Date</th>
+                                <th className="p-4">Nom</th>
+                                <th className="p-4">Entreprise</th>
+                                <th className="p-4">Email</th>
                                 <th className="p-4 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {news.map((article) => (
-                                <tr key={article.id} className="border-b border-brand-secondary hover:bg-brand-secondary/50">
-                                    <td className="p-4 font-medium text-white">{article.title}</td>
-                                    <td className="p-4">{article.category}</td>
-                                    <td className="p-4">{article.date}</td>
+                            {clients.map((client) => (
+                                <tr key={client.id} className="border-b border-brand-secondary hover:bg-brand-secondary/50">
+                                    <td className="p-4 font-medium text-white">{client.name}</td>
+                                    <td className="p-4">{client.company}</td>
+                                    <td className="p-4">{client.email}</td>
                                     <td className="p-4 flex justify-end space-x-2">
-                                        <button onClick={() => handleOpenModal(article)} className="p-2 hover:bg-gray-700 rounded-full" aria-label="Modifier">
+                                        <button onClick={() => handleOpenModal(client)} className="p-2 hover:bg-gray-700 rounded-full" aria-label="Modifier">
                                             <EditIcon className="w-4 h-4 text-blue-400" />
                                         </button>
-                                        <button onClick={() => handleDelete(article.id)} className="p-2 hover:bg-gray-700 rounded-full" aria-label="Supprimer">
+                                        <button onClick={() => handleDelete(client.id)} className="p-2 hover:bg-gray-700 rounded-full" aria-label="Supprimer">
                                             <TrashIcon className="w-4 h-4 text-red-400" />
                                         </button>
                                     </td>
@@ -86,8 +86,8 @@ const AdminNewsView: React.FC = () => {
                 </div>
             </div>
             {isModalOpen && (
-                <NewsArticleFormModal
-                    article={editingArticle}
+                <ClientFormModal
+                    client={editingClient}
                     onClose={handleCloseModal}
                     onSave={handleSave}
                 />
@@ -96,4 +96,4 @@ const AdminNewsView: React.FC = () => {
     );
 };
 
-export default AdminNewsView;
+export default AdminClientsView;

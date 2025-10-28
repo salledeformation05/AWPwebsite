@@ -74,6 +74,21 @@ export interface Training {
   instructor: string;
 }
 
+export interface Message {
+    id: number;
+    text: string;
+    sender: 'user' | 'agent';
+    name: string;
+}
+
+export interface Document {
+    id: string;
+    clientId: string;
+    name: string;
+    date: string;
+    size: string;
+}
+
 // Fix: Moved AuthContext from App.tsx to types.ts to avoid circular dependency
 export interface AuthContextType {
     user: User | null;

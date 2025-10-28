@@ -5,6 +5,8 @@ import AdminClientsView from './admin/AdminClientsView';
 import AdminServicesView from './admin/AdminServicesView';
 import AdminBillingView from './admin/AdminBillingView';
 import AdminTrainingView from './admin/AdminTrainingView';
+import AdminDocumentsView from './admin/AdminDocumentsView';
+import AdminMessagesView from './admin/AdminMessagesView';
 import { ChartBarIcon } from './icons/ChartBarIcon';
 import { NewspaperIcon } from './icons/NewspaperIcon';
 import { UsersIcon } from './icons/UsersIcon';
@@ -12,8 +14,10 @@ import { Page } from '../App';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { DollarSignIcon } from './icons/DollarSignIcon';
 import { BookOpenIcon } from './icons/BookOpenIcon';
+import { DocumentIcon } from './icons/DocumentIcon';
+import { MessageSquareIcon } from './icons/MessageSquareIcon';
 
-type AdminView = 'dashboard' | 'news' | 'clients' | 'services' | 'billing' | 'training';
+type AdminView = 'dashboard' | 'news' | 'clients' | 'services' | 'billing' | 'training' | 'documents' | 'messages';
 
 interface AdminPortalProps {
     navigate: (page: Page) => void;
@@ -34,6 +38,10 @@ const AdminPortal: React.FC<AdminPortalProps> = ({ navigate }) => {
                 return <AdminBillingView />;
             case 'training':
                 return <AdminTrainingView />;
+            case 'documents':
+                return <AdminDocumentsView />;
+            case 'messages':
+                return <AdminMessagesView />;
             case 'dashboard':
             default:
                 return <AdminDashboardView />;
@@ -70,6 +78,8 @@ const AdminPortal: React.FC<AdminPortalProps> = ({ navigate }) => {
                         <NavItem view="clients" icon={<UsersIcon className="w-5 h-5" />} label="Clients" />
                         <NavItem view="services" icon={<SettingsIcon className="w-5 h-5" />} label="Services" />
                         <NavItem view="billing" icon={<DollarSignIcon className="w-5 h-5" />} label="Facturation" />
+                        <NavItem view="documents" icon={<DocumentIcon className="w-5 h-5" />} label="Documents" />
+                        <NavItem view="messages" icon={<MessageSquareIcon className="w-5 h-5" />} label="Messagerie" />
                         <NavItem view="training" icon={<BookOpenIcon className="w-5 h-5" />} label="Formations" />
                     </div>
                 </aside>

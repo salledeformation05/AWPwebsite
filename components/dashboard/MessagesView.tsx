@@ -2,22 +2,18 @@ import React, { useState, useContext, useRef, useEffect } from 'react';
 import { SendIcon } from '../icons/SendIcon';
 import { useToast } from '../../contexts/ToastContext';
 // Fix: Update AuthContext import path to fix circular dependency
-import { AuthContext } from '../../types';
-
-interface Message {
-    id: number;
-    text: string;
-    sender: 'user' | 'agent';
-    name: string;
-}
+import { AuthContext, Message } from '../../types';
+import { conversations } from '../../data/messages';
 
 const MessagesView: React.FC = () => {
     const { user } = useContext(AuthContext);
     const { showToast } = useToast();
     const [newMessage, setNewMessage] = useState('');
-    const [messages, setMessages] = useState<Message[]>([
-        { id: 1, text: "Bonjour, voici le devis mis à jour comme demandé. N'hésitez pas si vous avez des questions.", sender: 'agent', name: 'Amina Traoré' }
-    ]);
+    
+    // Initialize state from the shared conversations object
+    const userConversation = user ? conversations[user.id] || [] : [];
+    const [messages, setMessages] = useState<Message[]>(userConversation);
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
@@ -25,6 +21,11 @@ const MessagesView: React.FC = () => {
     }
 
     useEffect(scrollToBottom, [messages]);
+    
+    // Resync with shared state if user changes
+    useEffect(() => {
+        setMessages(user ? conversations[user.id] || [] : []);
+    }, [user]);
 
     const handleSend = () => {
         if (!newMessage.trim() || !user) return;
@@ -35,7 +36,13 @@ const MessagesView: React.FC = () => {
             sender: 'user',
             name: user.name
         };
-        setMessages([...messages, messageToSend]);
+
+        const updatedMessages = [...messages, messageToSend];
+        // Update local state for immediate feedback
+        setMessages(updatedMessages);
+        // Update the shared conversations object
+        conversations[user.id] = updatedMessages;
+
         setNewMessage('');
         showToast("Message envoyé !");
     };
